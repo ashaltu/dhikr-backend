@@ -1,3 +1,6 @@
 .env
 __pycache__/
 *.pyc
+export_repo.py
+repo_export.tar
+repo_export/
