@@ -13,7 +13,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dhikr_user"]
+      test: ["CMD-SHELL", "pg_isready -U dhikr_user -d dhikr"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -25,8 +25,9 @@ services:
       DATABASE_URL: postgresql://dhikr_user:dhikr_pass@db:5432/dhikr
       SERVER_HMAC_KEY: ${SERVER_HMAC_KEY:-your_secure_random_key_here_change_this}
       QURAN_API_URL: https://api.quran.com/api/v4
+      PORT: ${PORT:-5001}
     ports:
-      - "5000:5000"
+      - "${PORT:-5001}:${PORT:-5001}"
     depends_on:
       db:
         condition: service_healthy

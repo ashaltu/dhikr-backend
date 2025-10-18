@@ -50,13 +50,13 @@ The easiest way to run the backend locally with PostgreSQL:
    docker-compose up
    ```
 
-That's it! The API will be available at `http://localhost:5000`
+That's it! The API will be available at `http://localhost:5001`
 
 Docker Compose will:
 - Start PostgreSQL on port 5432
 - Create all database tables
 - Load 8 seed reminder rules
-- Start the FastAPI server on port 5000
+- Start the FastAPI server on port 5001
 
 **Useful Docker Commands**:
 ```bash
@@ -110,10 +110,10 @@ docker-compose down -v
 
 4. **Start the Server**:
    ```bash
-   uvicorn app.main:app --host 0.0.0.0 --port 5000 --reload
+   uvicorn app.main:app --host 0.0.0.0 --port 5001 --reload
    ```
 
-The API will be available at `http://localhost:5000`
+The API will be available at `http://localhost:5001`
 
 ## API Endpoints
 
@@ -277,13 +277,13 @@ You can test the API using curl:
 
 ```bash
 # Get a reminder
-curl "http://localhost:5000/reminder?domain=youtube.com&path=/shorts"
+curl "http://localhost:5001/reminder?domain=youtube.com&path=/shorts"
 
 # View all rules
-curl "http://localhost:5000/rules"
+curl "http://localhost:5001/rules"
 
 # Log analytics
-curl -X POST "http://localhost:5000/analytics/log" \
+curl -X POST "http://localhost:5001/analytics/log" \
   -H "Content-Type: application/json" \
   -d '{
     "url": "https://youtube.com/shorts/test",
@@ -294,7 +294,7 @@ curl -X POST "http://localhost:5000/analytics/log" \
   }'
 
 # Get analytics summary
-curl "http://localhost:5000/analytics/summary?period=7d"
+curl "http://localhost:5001/analytics/summary?period=7d"
 ```
 
 ## Default Reminder Rules
