@@ -30,12 +30,57 @@ A privacy-focused FastAPI backend for a Muslim browser extension that provides Q
 
 ## Setup Instructions
 
-### Prerequisites
+### Option 1: Docker (Recommended for Local Development)
+
+The easiest way to run the backend locally with PostgreSQL:
+
+1. **Generate HMAC Key**:
+   ```bash
+   python -c "import secrets; print(secrets.token_hex(32))"
+   ```
+
+2. **Create `.env` file**:
+   ```bash
+   cp .env.example .env
+   # Edit .env and replace SERVER_HMAC_KEY with the generated key
+   ```
+
+3. **Start Everything**:
+   ```bash
+   docker-compose up
+   ```
+
+That's it! The API will be available at `http://localhost:5000`
+
+Docker Compose will:
+- Start PostgreSQL on port 5432
+- Create all database tables
+- Load 8 seed reminder rules
+- Start the FastAPI server on port 5000
+
+**Useful Docker Commands**:
+```bash
+# Run in background
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop everything
+docker-compose down
+
+# Reset database (removes all data)
+docker-compose down -v
+```
+
+### Option 2: Manual Installation (Without Docker)
+
+#### Prerequisites
 
 - Python 3.11+
-- PostgreSQL database (provided by Replit)
+- PostgreSQL database
 
-### Installation
+#### Installation
 
 1. **Install Dependencies**:
    ```bash
@@ -44,9 +89,14 @@ A privacy-focused FastAPI backend for a Muslim browser extension that provides Q
 
 2. **Environment Variables**:
    
-   Create a `.env` file or use the existing environment variables:
+   Create a `.env` file:
+   ```bash
+   cp .env.example .env
    ```
-   DATABASE_URL=postgresql://user:password@host:port/database
+   
+   Edit `.env` and set:
+   ```
+   DATABASE_URL=postgresql://user:password@localhost:5432/dhikr
    SERVER_HMAC_KEY=your_long_random_secret_key_here
    QURAN_API_URL=https://api.quran.com/api/v4
    ```

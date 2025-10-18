@@ -2,6 +2,7 @@ import asyncio
 import os
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy import select, func
 from app.models import Base, ReminderRule
 
 load_dotenv()
@@ -30,6 +31,13 @@ async def seed_database():
         await conn.run_sync(Base.metadata.create_all)
     
     async with AsyncSessionLocal() as session:
+        result = await session.execute(select(func.count()).select_from(ReminderRule))
+        existing_count = result.scalar() or 0
+        
+        if existing_count > 0:
+            print(f"✓ Database already contains {existing_count} reminder rules. Skipping seed.")
+            return
+        
         seed_rules = [
             ReminderRule(
                 domain_pattern="youtube.com",

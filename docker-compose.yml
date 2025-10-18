@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: dhikr-postgres
+    environment:
+      POSTGRES_USER: dhikr_user
+      POSTGRES_PASSWORD: dhikr_pass
+      POSTGRES_DB: dhikr
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dhikr_user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: dhikr-api
+    environment:
+      DATABASE_URL: postgresql://dhikr_user:dhikr_pass@db:5432/dhikr
+      SERVER_HMAC_KEY: ${SERVER_HMAC_KEY:-your_secure_random_key_here_change_this}
+      QURAN_API_URL: https://api.quran.com/api/v4
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./app:/app/app
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
