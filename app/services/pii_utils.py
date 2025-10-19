@@ -9,10 +9,11 @@ def redact_pii(text: str) -> str:
     text = re.sub(email_pattern, '[EMAIL_REDACTED]', text)
     
     phone_patterns = [
-        r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b',
-        r'\b\(\d{3}\)\s*\d{3}[-.]?\d{4}\b',
-        r'\+\d{1,3}[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}\b'
+        r'\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b',                      # simple 123-456-7890
+        r'\(\d{3}\)\s*\d{3}[-.\s]*\d{4}',                          # (123) 456 7890, (123)456-7890
+        r'\+\d{1,3}[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}\b'  # international
     ]
+
     for pattern in phone_patterns:
         text = re.sub(pattern, '[PHONE_REDACTED]', text)
     
